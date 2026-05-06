@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Templato</title>
+  <style>
+    :root {
+      --arctic: #D3D1CE;
+      --slopes: #B3B7BA;
+      --apres: #6C6D74;
+      --mountainside: #262E36;
+      --midnight: #090F15;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--arctic);
+      color: var(--midnight);
+      font-family: Inter, Arial, sans-serif;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image: radial-gradient(var(--midnight) 0.7px, transparent 0.7px);
+      background-size: 18px 18px;
+      z-index: 0;
+    }
+
+    .serif {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+    }
+
+    .container {
+      width: min(100% - 48px, 1280px);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(108, 109, 116, 0.2);
+      background: rgba(211, 209, 206, 0.85);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 30px;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: var(--midnight);
+      color: var(--arctic);
+      display: grid;
+      place-items: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 32px;
+    }
+
+    nav a {
+      color: rgba(38, 46, 54, 0.75);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: var(--midnight);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 24px;
+      background: var(--midnight);
+      color: var(--arctic);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background: var(--mountainside);
+      transform: translateY(-1px);
+    }
+
+    .button.light {
+      background: var(--arctic);
+      color: var(--midnight);
+    }
+
+    .button.light:hover {
+      background: var(--slopes);
+    }
+
+    .button.outline {
+      border: 1px solid rgba(108, 109, 116, 0.3);
+      background: transparent;
+      color: var(--midnight);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding: 88px 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(108, 109, 116, 0.2);
+      background: rgba(179, 183, 186, 0.3);
+      color: var(--mountainside);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-size: clamp(56px, 8vw, 112px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .hero p {
+      max-width: 580px;
+      margin-top: 28px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(38, 46, 54, 0.8);
+    }
+
+    .search {
+      margin-top: 36px;
+      max-width: 580px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(108, 109, 116, 0.25);
+      background: rgba(211, 209, 206, 0.8);
+      border-radius: 999px;
+      padding: 8px;
+      box-shadow: 0 24px 50px rgba(9, 15, 21, 0.05);
+    }
+
+    .search svg {
+      margin-left: 12px;
+      color: var(--apres);
+      flex-shrink: 0;
+    }
+
+    .search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 16px;
+      min-width: 0;
+      color: var(--midnight);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      color: rgba(38, 46, 54, 0.75);
+      font-size: 14px;
+    }
+
+    .tags span {
+      border: 1px solid rgba(108, 109, 116, 0.2);
+      background: rgba(211, 209, 206, 0.8);
+      border-radius: 999px;
+      padding: 8px 16px;
+    }
+
+    .preview-wrap {
+      position: relative;
+    }
+
+    .blur-one,
+    .blur-two {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      filter: blur(48px);
+    }
+
+    .blur-one {
+      top: -32px;
+      left: -32px;
+      background: var(--slopes);
+      opacity: 0.6;
+    }
+
+    .blur-two {
+      bottom: -32px;
+      right: -32px;
+      background: var(--apres);
+      opacity: 0.3;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid rgba(108, 109, 116, 0.15);
+      background: rgba(179, 183, 186, 0.55);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 30px 80px rgba(9, 15, 21, 0.2);
+      overflow: hidden;
+    }
+
+    .dark-card {
+      background: var(--midnight);
+      color: var(--arctic);
+      border-radius: 28px;
+      padding: 24px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--slopes);
+      font-size: 14px;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dark-card h2 {
+      margin-top: 32px;
+      font-size: 40px;
+      letter-spacing: -0.04em;
+    }
+
+    .dark-card p {
+      margin-top: 12px;
+      color: var(--slopes);
+      line-height: 1.6;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .mini-grid div {
+      border: 1px solid rgba(211, 209, 206, 0.1);
+      background: rgba(211, 209, 206, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .app-grid div {
+      border: 1px solid rgba(108, 109, 116, 0.2);
+      background: rgba(211, 209, 206, 0.7);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--mountainside);
+      font-size: 14px;
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-pad {
+      padding: 64px 0;
+    }
+
+    .section-label {
+      margin-bottom: 8px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--apres);
+    }
+
+    h2.section-title {
+      font-size: clamp(40px, 5vw, 56px);
+      letter-spacing: -0.04em;
+    }
+
+    .section-desc {
+      margin-top: 12px;
+      color: rgba(38, 46, 54, 0.75);
+      line-height: 1.7;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .category-grid,
+    .featured-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .category-card {
+      border: 1px solid rgba(108, 109, 116, 0.15);
+      border-radius: 32px;
+      padding: 24px;
+      transition: 0.2s ease;
+    }
+
+    .category-card:hover,
+    .template-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(9, 15, 21, 0.13);
+    }
+
+    .category-card:nth-child(1) { background: var(--arctic); }
+    .category-card:nth-child(2) { background: rgba(179, 183, 186, 0.55); }
+    .category-card:nth-child(3) { background: rgba(108, 109, 116, 0.2); }
+    .category-card:nth-child(4) {
+      background: var(--mountainside);
+      color: var(--arctic);
+    }
+
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      opacity: 0.8;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+    }
+
+    .category-card h3 {
+      font-size: 26px;
+      letter-spacing: -0.04em;
+    }
+
+    .category-card p {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.75;
+    }
+
+    .category-card strong {
+      display: block;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .featured {
+      background: var(--midnight);
+      color: var(--arctic);
+      padding: 80px 0;
+    }
+
+    .featured .section-desc,
+    .featured .section-label {
+      color: var(--slopes);
+    }
+
+    .featured-grid {
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 40px;
+    }
+
+    .template-card {
+      border: 1px solid rgba(211, 209, 206, 0.1);
+      background: var(--mountainside);
+      color: var(--arctic);
+      border-radius: 32px;
+      padding: 24px;
+      transition: 0.2s ease;
+    }
+
+    .template-image {
+      height: 176px;
+      border-radius: 24px;
+      background: var(--slopes);
+      color: var(--midnight);
+      display: grid;
+      place-items: center;
+      font-size: 52px;
+      margin-bottom: 24px;
+    }
+
+    .template-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--slopes);
+      font-size: 14px;
+    }
+
+    .template-card h3 {
+      margin-top: 12px;
+      font-size: 32px;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .price-row {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .how {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .steps {
+      display: grid;
+      gap: 16px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid rgba(108, 109, 116, 0.15);
+      background: rgba(179, 183, 186, 0.3);
+      border-radius: 24px;
+      padding: 20px;
+      font-weight: 700;
+      color: var(--mountainside);
+    }
+
+    .cta {
+      padding-bottom: 80px;
+    }
+
+    .cta-box {
+      background: var(--mountainside);
+      color: var(--arctic);
+      border-radius: 32px;
+      padding: 64px 32px;
+      text-align: center;
+      box-shadow: 0 30px 80px rgba(9, 15, 21, 0.2);
+    }
+
+    .cta-box h2 {
+      font-size: clamp(40px, 5vw, 56px);
+      letter-spacing: -0.04em;
+    }
+
+    .cta-box p {
+      max-width: 680px;
+      margin: 16px auto 0;
+      color: var(--slopes);
+      line-height: 1.7;
+    }
+
+    .cta-box .button {
+      margin-top: 32px;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(108, 109, 116, 0.2);
+      background: var(--arctic);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 32px 0;
+      color: rgba(38, 46, 54, 0.7);
+      font-size: 14px;
+    }
+
+    svg {
+      display: block;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        display: none;
+      }
+
+      .hero,
+      .how {
+        grid-template-columns: 1fr;
+      }
+
+      .category-grid,
+      .featured-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 32px, 1280px);
+      }
+
+      .nav {
+        gap: 16px;
+      }
+
+      .brand {
+        font-size: 24px;
+      }
+
+      .nav .button {
+        padding: 10px 14px;
+        font-size: 12px;
+      }
+
+      .search {
+        border-radius: 24px;
+        flex-wrap: wrap;
+      }
+
+      .search input {
+        width: calc(100% - 50px);
+      }
+
+      .search .button {
+        width: 100%;
+      }
+
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand serif">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+        </div>
+        <span>Templato</span>
+      </div>
+
+      <nav>
+        <a href="#categories">Categories</a>
+        <a href="#featured">Templates</a>
+        <a href="#how">How it works</a>
+      </nav>
+
+      <a href="#featured" class="button">Start Browsing</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero">
+      <div>
+        <div class="pill">
+          ✦ Templates for every app, task, and goal
+        </div>
+
+        <h1 class="serif">Find the perfect template in seconds.</h1>
+
+        <p>
+          Templato is a refined marketplace for ready-to-use templates across Microsoft, Google,
+          Apple productivity apps, and Notion.
+        </p>
+
+        <div class="search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="text" placeholder="Search resumes, planners, budgets..." />
+          <button class="button">Search</button>
+        </div>
+
+        <div class="tags">
+          <span>Resume templates</span>
+          <span>Budget trackers</span>
+          <span>Notion planners</span>
+        </div>
+      </div>
+
+      <div class="preview-wrap">
+        <div class="blur-one"></div>
+        <div class="blur-two"></div>
+
+        <div class="card">
+          <div class="dark-card">
+            <div class="card-top">
+              <span>Featured template</span>
+              <span class="rating">★ 4.9</span>
+            </div>
+
+            <h2 class="serif">Ultimate Life Dashboard</h2>
+            <p>A clean Notion system for school, goals, habits, money, and planning.</p>
+
+            <div class="mini-grid">
+              <div>Weekly Planner</div>
+              <div>Habit Tracker</div>
+              <div>Budget Page</div>
+              <div>Goal System</div>
+            </div>
+          </div>
+
+          <div class="app-grid">
+            <div>Docs</div>
+            <div>Sheets</div>
+            <div>Slides</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="container section-pad">
+      <div class="section-head">
+        <div>
+          <p class="section-label">Catalog</p>
+          <h2 class="section-title serif">Browse by platform</h2>
+          <p class="section-desc">Choose the app you use and find templates made for it.</p>
+        </div>
+        <a class="button outline" href="#featured">View all →</a>
+      </div>
+
+      <div class="category-grid">
+        <div class="category-card">
+          <div class="icon-circle">□</div>
+          <h3 class="serif">Microsoft</h3>
+          <p>Word, Excel, PowerPoint templates</p>
+          <strong>450+ templates</strong>
+        </div>
+
+        <div class="category-card">
+          <div class="icon-circle">□</div>
+          <h3 class="serif">Google</h3>
+          <p>Docs, Sheets, Slides templates</p>
+          <strong>380+ templates</strong>
+        </div>
+
+        <div class="category-card">
+          <div class="icon-circle">□</div>
+          <h3 class="serif">Notion</h3>
+          <p>Planners, dashboards, business systems</p>
+          <strong>520+ templates</strong>
+        </div>
+
+        <div class="category-card">
+          <div class="icon-circle">□</div>
+          <h3 class="serif">Apple Productivity</h3>
+          <p>Pages, Numbers, Keynote productivity templates</p>
+          <strong>210+ templates</strong>
+        </div>
+      </div>
+    </section>
+
+    <section id="featured" class="featured">
+      <div class="container">
+        <p class="section-label">Featured</p>
+        <h2 class="section-title serif">Curated templates</h2>
+        <p class="section-desc">Popular picks that help you save time and look professional.</p>
+
+        <div class="featured-grid">
+          <div class="template-card">
+            <div class="template-image">□</div>
+            <div class="template-meta">
+              <span>Notion</span>
+              <span>★ 4.9</span>
+            </div>
+            <h3 class="serif">Student Study Planner</h3>
+            <div class="price-row">
+              <span class="price">$7</span>
+              <a class="button light" href="#">↓ Get</a>
+            </div>
+          </div>
+
+          <div class="template-card">
+            <div class="template-image">□</div>
+            <div class="template-meta">
+              <span>Excel / Google Sheets</span>
+              <span>★ 4.8</span>
+            </div>
+            <h3 class="serif">Business Budget Tracker</h3>
+            <div class="price-row">
+              <span class="price">$12</span>
+              <a class="button light" href="#">↓ Get</a>
+            </div>
+          </div>
+
+          <div class="template-card">
+            <div class="template-image">□</div>
+            <div class="template-meta">
+              <span>Word / Google Docs</span>
+              <span>★ 4.9</span>
+            </div>
+            <h3 class="serif">Modern Resume Pack</h3>
+            <div class="price-row">
+              <span class="price">$9</span>
+              <a class="button light" href="#">↓ Get</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="container section-pad">
+      <div class="how">
+        <div>
+          <p class="section-label">Simple process</p>
+          <h2 class="section-title serif">How Templato works</h2>
+          <p class="section-desc">
+            Search, preview, download, and customize templates for the apps you already use.
+          </p>
+        </div>
+
+        <div class="steps">
+          <div class="step">✓ Search for the template you need</div>
+          <div class="step">✓ Preview the design before downloading</div>
+          <div class="step">✓ Open it in your app and customize it</div>
+          <div class="step">✓ Save time while looking polished</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container cta">
+      <div class="cta-box">
+        <h2 class="serif">Ready to build faster?</h2>
+        <p>
+          Discover templates for school, work, business, content creation, personal finance,
+          and everyday organization.
+        </p>
+        <a class="button light" href="#featured">Explore Templates</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <p>© 2026 Templato. All rights reserved.</p>
+      <p>Templates for Microsoft, Apple Productivity, Google, and Notion.</p>
+    </div>
+  </footer>
+</body>
+</html>
